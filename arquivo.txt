@@ -1,0 +1,3 @@
+display: grid; //display em grid
+grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); // repita isso para todos os elemento, faça um tamanho minino para 280px, se não couber use 1 fragments;
+gap() // espaçamento entre elementos

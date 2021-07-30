@@ -1,0 +1,31 @@
+.container-post{
+ min-height: 100%;
+ background: rgb(233, 233, 233);
+
+ display:grid;
+ grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+ gap: 30px;
+ 
+ padding:15px;
+}
+
+.post{
+ background:#fff;
+ box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+
+ padding: 20px;
+
+ transition: transform 250ms ease-in-out;
+}
+
+.post:hover{
+ transform: scale(1.05);
+}
+
+.post img {
+ max-width: 100%;
+}
+
+.post h2{
+ margin: 0px 15px 15px 0px;
+}
