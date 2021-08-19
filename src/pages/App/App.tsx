@@ -1,18 +1,11 @@
 import { useEffect, useState } from "react";
 import './app.css';
-
-
-type Posts = {
-  id: number,
-  title: string,
-  body: string,
-  url: string,
-}
-
+import { Postprops } from '../../types/Postprops';
+import Posts from '../../components/posts/Posts';
 
 function App() {
 
-  const [posts, setPosts] = useState<Array<Posts>>([]);
+  const [posts, setPosts] = useState<Array<Postprops>>([]);
 
   useEffect(() => {
     postLoading();
@@ -28,7 +21,7 @@ function App() {
     const photosJson = await imgsPost.json();
     const postJson = await posts.json();
 
-    const postAndPhotos: Array<Posts> = postJson.map((post: Posts,index: number) => {
+    const postAndPhotos: Array<Postprops> = postJson.map((post: Postprops,index: number) => {
        return {...post, url: photosJson[index].url};
     })
 
@@ -38,14 +31,16 @@ function App() {
   
   return (
     <div className="container-post">
-      {posts.map((post: Posts, index: number) => {
+      {posts.map((post: Postprops, index: number) => {
         return(
           <>
-            <div className="post">
-              <img src={post.url} alt={post.title} />
-              <h2>{post.title}</h2>
-              <p>{post.body}</p>
-            </div>
+            <Posts 
+              key={index}
+              id={post.id}
+              url={post.url}
+              body={post.body}
+              title={post.title}
+            />
           </>
         )
       })}
