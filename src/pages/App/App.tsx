@@ -3,34 +3,35 @@ import './app.css';
 import { Postprops } from '../../types/Postprops';
 import Posts from '../../components/posts/Posts';
 import Button from '@material-ui/core/Button';
+import { Input } from '@material-ui/core';
 
 
 function App() {
 
   const [posts, setPosts] = useState<Array<Postprops>>([]);
-  const [homePage, setHomePage] = useState<number>(0);
+  const [homePage, setHomePage] = useState<number>(0); 
   const [lastPage, setLastPage] = useState<number>(5);
+  const [postPerPage, setPostPerPage] = useState<number>(5);
   const [totalPage, setTotalPage] = useState<number>(0);
-  /* const [disableNext, setDisableNext] = useState<boolean>(false);
-  const [previousDisable, setPreviousDisable] = useState<boolean>(true);
- */
+  const [seach, setSeach] = useState<string>('');
+
   const nextPage = () => {
     if(homePage >= totalPage - lastPage){
       return;
     }
-    setHomePage(prev => prev + lastPage);
-    setLastPage(prev => prev + lastPage);
+    setHomePage(prev => prev + postPerPage);
+    setLastPage(prev => prev + postPerPage);
+    setPostPerPage(5);
   }
 
   const previousPage = () => {
     if(homePage < 5){
       return;
     }
-    setHomePage(prev => prev - 5);
-    setLastPage(prev => prev - 5);
-   
+    setHomePage(prev => prev - postPerPage);
+    setLastPage(prev => prev - postPerPage);
+    setPostPerPage(5);
   }
-
 
   useEffect(() => {
     const postLoading  = async () => {
@@ -48,42 +49,63 @@ function App() {
       })
 
       setTotalPage(postAndPhotos.length);
-      setPosts(postAndPhotos.slice(homePage, lastPage));
+      setPosts(!!seach ? postAndPhotos.filter((post: Postprops) => {
+        return post.title.toLowerCase().includes(seach.toLowerCase());
+      }) :postAndPhotos.slice(homePage, lastPage));
     }
     postLoading();
-  }, [homePage, lastPage]);
+  }, [homePage, lastPage, seach]);
 
   return (
     <div>
-      <div className="container-post">
-        {posts.map((post: Postprops, index: number) => {
-          return(
-            <Posts 
-              key={index}
-              id={post.id}
-              url={post.url}
-              body={post.body}
-              title={post.title}
-            />
-          )
-        })}
+      <div className="container-input">
+        <span>Pesquisar por post: </span>
+        <Input 
+          color="primary" 
+          placeholder="Search" 
+          onChange={(e)=>setSeach(e.target.value)}
+        />
+      </div>
+      <div className={!!seach ? `nonePost`: 'container-post'}>
+       {posts.length === 0 ? (
+          <h3>Não foi encontrado nenhum post com a título pesquisado</h3>
+       ): (
+         <>
+          {posts.map((post: Postprops, index: number) => {
+            return(
+              <Posts 
+                key={index}
+                id={post.id}
+                url={post.url}
+                body={post.body}
+                title={post.title}
+              />
+            )
+          })}
+        </>
+       )}
       </div>
       <div className="container-buttons">
-        <Button 
-          variant="contained" 
-          onClick={() => previousPage()} 
-          disabled={homePage < 5 ? true : false}
-        >
-          Página anterior
-        </Button>
-        <Button 
-          variant="contained" 
-          color="primary" 
-          onClick={() => nextPage()}
-          disabled={homePage >= totalPage - lastPage ? true : false}
-        >
-          Próxima página
-        </Button>
+       {!seach && (
+         <>
+            <Button 
+            variant="contained" 
+            onClick={() => previousPage()} 
+            disabled={homePage < 5 ? true : false}
+            >
+              Página anterior
+            </Button>
+            <Button 
+              variant="contained" 
+              color="primary" 
+              onClick={() => nextPage()}
+              disabled={homePage >= totalPage - lastPage ? true : false}
+            >
+              Próxima página
+            </Button>
+        </>
+        )
+      }
       </div>
    </div>
   );
