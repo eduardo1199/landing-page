@@ -1,6 +1,8 @@
+
+
 .container-post{
  min-height: 100%;
- background: rgb(233, 233, 233);
+ background: #f8f8f8;
 
  display:grid;
  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -8,3 +10,11 @@
  
  padding:15px;
 }
+
+.container-buttons{
+ width:100%;
+ display: flex;
+ align-items: center;
+ justify-content: space-around;
+}
+
