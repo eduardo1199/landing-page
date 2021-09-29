@@ -101,7 +101,7 @@ function App() {
               onClick={() => nextPage()}
               disabled={homePage >= totalPage - lastPage ? true : false}
             >
-              Próxima página
+              Next Page
             </Button>
         </>
         )
@@ -109,6 +109,6 @@ function App() {
       </div>
    </div>
   );
-}
+};
 
 export default App;
